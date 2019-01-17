@@ -1,0 +1,30 @@
+{
+  "name": "gae-standard-nodejs8-500-error",
+  "version": "1.0.0",
+  "repository": "https://github.com/bookcreator/gae-standard-nodejs8-500-error",
+  "author": "Rich Hodgkins <rich@bookcreator.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "debug": "DEBUG=gae-standard-nodejs8-500-error:* GOOGLE_CLOUD_PROJECT=bookcreator-dev GCLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT node ./bin/www",
+    "start": "GCLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT node ./bin/www",
+    "deploy": "gcloud app deploy app.yaml --quiet --promote --project=bookcreator-dev"
+  },
+  "dependencies": {
+    "@google-cloud/debug-agent": "^3.0.1",
+    "@google-cloud/logging-winston": "^0.9.0",
+    "@google-cloud/storage": "^1.7.0",
+    "@google-cloud/trace-agent": "^3.5.0",
+    "cookie-parser": "^1.4.3",
+    "corser": "^2.0.1",
+    "express": "^4.16.4",
+    "firebase-admin": "^6.5.0",
+    "http-errors": "^1.7.1",
+    "sharp": "^0.20.7",
+    "winston": "^2.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "morgan": "^1.9.1"
+  }
+}

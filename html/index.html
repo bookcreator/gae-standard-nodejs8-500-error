@@ -1,0 +1,93 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+
+   <title>Test page</title>
+   <meta name="description" content="Test page">
+
+</head>
+
+<body>
+   <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script>
+   <script>
+      // Initialize Firebase
+      var config = {
+         apiKey: "AIzaSyDmvYgy0usRL_Biu9OFBU2hzILGHNL7sDE",
+         authDomain: "node-500-error-dot-bookcreator-dev.appspot.com",
+         // projectId: "bookcreator-dev"
+      };
+      firebase.initializeApp(config);
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+   </script>
+
+   <div>
+      <button id="login" onclick="login();">Login</button>
+      <button id="addImages" onclick="addImages();">Add Images</button>
+      <button id="addVideos" onclick="addVideos();">Add Videos</button>
+   </div>
+
+   <div id="images">
+      <img src="/image" width="200" />
+   </div>
+
+   <div id="videos">
+      <video width="200" controls>
+         <source src="/video" type="video/mp4">
+      </video>
+   </div>
+
+   <script>
+      let loggedIn = false
+
+      function login() {
+         firebase.auth().signInWithEmailAndPassword('rich+gaeerror@bookcreator.com', 'Qwerty1234').then(({ user }) => {
+            loggedIn = true
+            // Get the user's ID token as it is needed to exchange for a session cookie.
+            return user.getIdToken().then(idToken => fetch(new Request('/auth', {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json'
+               },
+               cache: "no-store",
+               body: JSON.stringify(idToken)
+            })));
+         }).then(() => {
+            console.log('Logged in!');
+         }).catch(err => {
+            console.error('Error logging in:', err)
+            alert(err)
+         });
+      }
+
+      function addImages() {
+         const images = document.getElementById("images");
+         let path = ''
+         if (loggedIn) path += '/users'
+         path += '/image'
+         for (let i = 0; i < 10; i++) {
+            const img = new Image(200);
+            img.src = path + `?width=${Math.round(Math.random() * 200)}&r=${Math.random()}`;
+            images.appendChild(img);
+         }
+      }
+
+      function addVideos() {
+         const videos = document.getElementById("videos");
+         let path = ''
+         if (loggedIn) path += '/users'
+         path += '/video'
+         for (let i = 0; i < 10; i++) {
+            const vid = document.createElement("video");
+            vid.width = 200;
+            vid.controls = true;
+            vid.src = path + `?r=${Math.random()}`;
+            videos.appendChild(vid);
+         }
+      }
+   </script>
+</body>
+
+</html>
