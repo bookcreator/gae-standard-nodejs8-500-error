@@ -34,7 +34,9 @@ module.exports = (req, res, next) => {
    if (eTag) {
       res.set('ETag', eTag)
    }
-   res.set('Content-Length', contentLength)
+   if (req.get('x-bc-no-content-length') !== 'true') {
+      res.set('Content-Length', contentLength)
+   }
 
    // Content type
    if (contentType) {
