@@ -17,6 +17,7 @@
     "@google-cloud/trace-agent": "^3.5.0",
     "cookie-parser": "^1.4.3",
     "corser": "^2.0.1",
+    "etag": "^1.8.1",
     "express": "^4.16.4",
     "firebase-admin": "^6.5.0",
     "http-errors": "^1.7.1",

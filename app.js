@@ -29,6 +29,7 @@ admin.initializeApp({
 require('./logging')
 
 const express = require('express')
+const etagMaker = require('etag')
 const corser = require('corser')
 const HttpError = require('http-errors')
 const cookieParser = require('cookie-parser')
@@ -106,6 +107,26 @@ app.get('/timeout', (req, res) => { // eslint-disable-line no-unused-vars
 app.get('/latency', (req, res) => {
    const timeoutSecs = parseFloat(req.query.timeout) || (Math.random() * 20)
    setTimeout(() => res.send(`Waited for ${timeoutSecs.toFixed(3)} secs`), timeoutSecs * 1000)
+})
+
+app.get('/304', (req, res) => {
+   return res.status(304).end()
+})
+
+app.get('/304-with-etag', (req, res) => {
+   return res.status(304).set('etag', etagMaker('hello, world')).end()
+})
+
+app.post('/test', (req, res) => {
+   let { statusCode = 200, headers = {}, body } = req.body
+   const etag = headers['ETag'] || headers['Etag'] || headers['etag']
+   if (etag && etag === req.get('If-None-Match')) {
+      statusCode = 304
+      body = undefined
+   }
+   res.status(statusCode).set(headers)
+   if (body !== undefined) res.json(body)
+   res.end()
 })
 
 app.use(require('./middleware'))
